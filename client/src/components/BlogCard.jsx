@@ -9,7 +9,7 @@ export default function BlogCard({ post }){
 
   try {
     const res = await fetch(
-      `https://blog-bits-application-api.onrender.com/api/posts/${post._id}`,
+      `https://blogify-9yis.onrender.com/api/posts/${post._id}`,
       { method: "DELETE" }
     );
 

@@ -20,26 +20,37 @@ router.post('/', auth, async (req, res) => {
 // Get all posts (public)
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().populate('author', 'name').sort({ createdAt: -1 });
+    const posts = await Post.find()
+      .populate('author', 'name')
+      .sort({ createdAt: -1 });
+
     res.json(posts);
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
   }
-
-  
 });
 
-// DELETE a post
-router.delete("/:id", async (req, res) => {
+// DELETE a post (protected + only owner)
+router.delete("/:id", auth, async (req, res) => {
   try {
-    const deleted = await Post.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: "Post not found" });
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.author.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized to delete this post" });
+    }
+
+    await post.deleteOne();
     res.json({ message: "Post deleted successfully" });
+
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 });
-
 
 export default router;

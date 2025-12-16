@@ -11,18 +11,24 @@ export default function App() {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const storedUser = localStorage.getItem('user')
+  const token = localStorage.getItem('token')
+  const rawUser = localStorage.getItem('user')
 
-    let userData = null
-    if (storedUser && storedUser !== "undefined") {
-      userData = JSON.parse(storedUser)
-    }
+  if (!token || !rawUser || rawUser === "undefined") {
+    setUser(null)
+    return
+  }
 
-    if (token && userData) {
-      setUser(userData)
-    }
-  }, [])
+  try {
+    const userData = JSON.parse(rawUser)
+    setUser(userData)
+  } catch (err) {
+    console.error("Invalid user JSON", err)
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
+    setUser(null)
+  }
+}, [])
 
   return (
     <>

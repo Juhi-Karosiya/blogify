@@ -7,15 +7,23 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Create from './pages/Create'
 
-export default function App(){
+export default function App() {
   const [user, setUser] = useState(null)
-  useEffect(()=>{
+
+  useEffect(() => {
     const token = localStorage.getItem('token')
-    const userData = JSON.parse(localStorage.getItem('user') || 'null')
-    if(token && userData){
+    const storedUser = localStorage.getItem('user')
+
+    let userData = null
+    if (storedUser && storedUser !== "undefined") {
+      userData = JSON.parse(storedUser)
+    }
+
+    if (token && userData) {
       setUser(userData)
     }
-  },[])
+  }, [])
+
   return (
     <>
       <Navbar user={user} setUser={setUser} />

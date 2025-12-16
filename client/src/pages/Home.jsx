@@ -1,10 +1,12 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import BlogCard from "../components/BlogCard";
 import { Toaster, toast } from "react-hot-toast";
 import { FaPenNib, FaCompass, FaFire, FaClock, FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL; 
+
 
 export default function Home() {
   const [posts, setPosts] = useState([]);

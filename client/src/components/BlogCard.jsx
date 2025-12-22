@@ -3,19 +3,19 @@ import { motion } from 'framer-motion';
 import { FaUserCircle } from 'react-icons/fa';
 
 export default function BlogCard({ post }) {
+  const token = localStorage.getItem("token"); 
+
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this blog?")) return;
 
     try {
-      const token = localStorage.getItem("token");
-
       const res = await fetch(
         `https://blogify-9yis.onrender.com/api/posts/${post._id}`,
         {
           method: "DELETE",
           headers: {
-            "Authorization": `Bearer ${token}`,
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -48,20 +48,23 @@ export default function BlogCard({ post }) {
       <footer className="card-footer">
         <small>{new Date(post.createdAt).toLocaleString()}</small>
 
-        <button 
-          onClick={handleDelete}
-          style={{
-            background: "red",
-            color: "white",
-            border: "none",
-            padding: "6px 12px",
-            borderRadius: "5px",
-            cursor: "pointer",
-            marginLeft: "10px"
-          }}
-        >
-          Delete
-        </button>
+        {/* ✅ HIDDEN AFTER LOGOUT */}
+        {token && (
+          <button
+            onClick={handleDelete}
+            style={{
+              background: "red",
+              color: "white",
+              border: "none",
+              padding: "6px 12px",
+              borderRadius: "5px",
+              cursor: "pointer",
+              marginLeft: "10px",
+            }}
+          >
+            Delete
+          </button>
+        )}
       </footer>
     </motion.article>
   );

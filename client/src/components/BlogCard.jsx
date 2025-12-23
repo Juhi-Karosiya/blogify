@@ -1,9 +1,14 @@
 import React from 'react'; 
 import { motion } from 'framer-motion';
 import { FaUserCircle } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
 export default function BlogCard({ post }) {
-  const token = localStorage.getItem("token"); 
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this blog?")) return;
@@ -22,12 +27,9 @@ export default function BlogCard({ post }) {
       if (res.ok) {
         alert("Blog deleted successfully!");
         window.location.reload();
-      } else {
-        alert("Failed to delete blog");
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong");
     }
   };
 
@@ -48,7 +50,6 @@ export default function BlogCard({ post }) {
       <footer className="card-footer">
         <small>{new Date(post.createdAt).toLocaleString()}</small>
 
-        {/* ✅ HIDDEN AFTER LOGOUT */}
         {token && (
           <button
             onClick={handleDelete}

@@ -7,6 +7,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Create from './pages/Create'
 
+<Route path="/" element={<Home user={user} />} />
+
 export default function App() {
   const [user, setUser] = useState(null)
 

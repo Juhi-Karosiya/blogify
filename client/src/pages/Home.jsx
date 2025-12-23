@@ -7,7 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 const API_URL = import.meta.env.VITE_API_URL; 
 
-
+<BlogCard
+  key={post._id}
+  post={post}
+  user={user}
+/>
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();

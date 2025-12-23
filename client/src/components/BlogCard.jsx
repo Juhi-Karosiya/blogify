@@ -1,67 +1,45 @@
-import React from 'react'; 
-import { motion } from 'framer-motion';
-import { FaUserCircle } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import { FaUserCircle } from "react-icons/fa";
 
-export default function BlogCard({ post }) {
-  const [token, setToken] = useState(null);
-
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
+export default function BlogCard({ post, user }) {
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this blog?")) return;
 
-    try {
-      const res = await fetch(
-        `https://blogify-9yis.onrender.com/api/posts/${post._id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    const token = localStorage.getItem("token");
 
-      if (res.ok) {
-        alert("Blog deleted successfully!");
-        window.location.reload();
+    await fetch(
+      `https://blogify-9yis.onrender.com/api/posts/${post._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    } catch (error) {
-      console.error(error);
-    }
+    );
+
+    window.location.reload();
   };
 
   return (
-    <motion.article className="card" whileHover={{ scale: 1.02 }}>
-      <header className="card-header">
+    <motion.article className="card">
+      <header>
         <h3>{post.title}</h3>
-        <div className="author">
+        <div>
           <FaUserCircle />
-          <span>{post.author?.name || 'Anonymous'}</span>
+          {post.author?.name || "Anonymous"}
         </div>
       </header>
 
-      <div className="card-body">
-        <p>{post.body}</p>
-      </div>
+      <p>{post.body}</p>
 
-      <footer className="card-footer">
+      <footer>
         <small>{new Date(post.createdAt).toLocaleString()}</small>
 
-        {token && (
+        {user && post.author?._id === user.id && (
           <button
             onClick={handleDelete}
-            style={{
-              background: "red",
-              color: "white",
-              border: "none",
-              padding: "6px 12px",
-              borderRadius: "5px",
-              cursor: "pointer",
-              marginLeft: "10px",
-            }}
+            style={{ background: "red", color: "white" }}
           >
             Delete
           </button>

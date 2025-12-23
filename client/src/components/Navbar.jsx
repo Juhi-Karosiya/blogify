@@ -14,12 +14,12 @@ import {
 export default function Navbar({ user, setUser }) {
   const navigate = useNavigate()
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    setUser(null)
-    navigate('/')
-  }
+ const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  setUser(null);  
+  navigate("/");
+};
 
   return (
 <motion.nav
